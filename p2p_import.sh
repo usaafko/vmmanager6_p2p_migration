@@ -112,13 +112,17 @@ cat << EOF >> $new_vm_json
 EOF
 
 pprint "Creating new VM..."
+cat $new_vm_json
+
 newvm=$(post "@${new_vm_json}" $VM_DEST_URL 'vm/v3/host' $token_dest)
+check_err "$newvm"
 rm -f $new_vm_json
+
 new_vm_id=$(echo $newvm | jq -r '.id')
 while true
 do
 	new_vm_json=$(get $token_dest $VM_DEST_URL "vm/v3/host/$new_vm_id")
-	check_err "$new_vm_json"
+ 	check_err "$new_vm_json"
 	if [ "x$(echo $new_vm_json | jq -r '.state')" = "xactive" ]; then
 		break
 	fi
