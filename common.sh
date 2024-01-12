@@ -64,7 +64,7 @@ login() {
 		token_json=$(post '{"email": "'$2'", "password": "'$3'"}' $1 'auth/v4/public/token')
 		first_login=2
 	done 
-	echo $token_from_json | jq -r '.token' > token
+	echo $token_json | jq -r '.token' > token
 }
 if [ -z "$1" ]; then
 	usage
