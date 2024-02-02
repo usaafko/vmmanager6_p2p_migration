@@ -91,11 +91,12 @@ DISK_ITER=0
 for DISK_ID in $old_vm_disks_ids; do
 	DISK_SIZE=$(echo $vm_meta | jq -r ".metadata.disks[$DISK_ITER].size_mib")
 	DISK_NAME=$(echo $vm_meta | jq -r ".metadata.disks[$DISK_ITER].name")
+	DISK_ORDER=$(echo $vm_meta | jq -r ".metadata.disks[$DISK_ITER].boot_order")
 	if [ "$DISK_ITER" -ge 1 ]; then echo ',' >>  $new_vm_json; fi
 	cat << EOF >> $new_vm_json
         {
             "size_mib": $DISK_SIZE,
-            "boot_order": $((DISK_ITER+1)),
+            "boot_order": $DISK_ORDER,
 			"storage": $dest_storage,
 			"name": "$DISK_NAME",
             "tags":
